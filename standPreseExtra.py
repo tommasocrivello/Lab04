@@ -8,3 +8,7 @@ class StandPreseExtra(Stand):
     @property
     def prezzo_finale(self):
         return self._prezzo * (1 + 0.07 * self._numPrese)
+
+    def __str__(self):
+        stato = "Disponibile" if self.disponibile else f"Assegnato a {self.espositore.codiceUnivoco}"
+        return f"{self._codiceUnivoco}: Prese Extra | {self._supMetriQuad} mq - Padiglione {self._padiglione} - Prezzo {self.prezzo_finale}€ - Prese aggiuntive: {self._numPrese} - {stato}"

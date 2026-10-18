@@ -45,12 +45,49 @@ class LingottoFiere:
     def assegna_stand_a_espositore(self, codice_stand, codice_espositore):
         """Associa uno stand a un espositore"""
         # TODO
+        espositore_trovato = None
+        for e in self.espositori:
+            if e.codiceUnivoco == codice_espositore:
+                espositore_trovato = e
 
+        if espositore_trovato is None:
+            raise Exception(f"Errore: L'espositore {codice_espositore} non esiste.")
+
+        stand_trovato = None
+        for s in self.stands:
+            if s.espositore is not None and s.espositore.codiceUnivoco == codice_espositore:
+                raise Exception(
+                    f"Errore: L'espositore {codice_espositore} ha già assegnato lo stand {s.codiceUnivoco}.")
+            if s.codiceUnivoco == codice_stand:
+                stand_trovato = s
+
+        if stand_trovato is None:
+            raise Exception(f"Errore: Lo stand {codice_stand} non esiste.")
+
+        if not stand_trovato.disponibile:
+            raise Exception(f"Errore: Lo stand {codice_stand} è già occupato.")
+
+        stand_trovato.espositore = espositore_trovato
 
     def elenca_espositori(self):
         """Stampa l'elenco degli espositori mostrando, per ognuno, lo stand a cui è associato, quando applicabile """
         # TODO
+        if len(self.espositori) == 0:
+            print("Nessun espositore registrato nel sistema.")
+            return
+
+        for e in self.espositori:
+            stand_assegnato = None
+            for s in self.stands:
+                if s.espositore is not None and s.espositore == e:
+                    stand_assegnato = s.codiceUnivoco
+
+            if stand_assegnato is not None:
+                print(f"Espositore: {e} -> Stand assegnato: {stand_assegnato}")
+            else:
+                print(f"Espositore: {e} -> Nessuno stand assegnato")
 
     def stand_ordinati_per_prezzo(self):
         """Restituisce la lista ordinata degli stand in base al prezzo"""
         # TODO
+        return sorted(self.stands)
